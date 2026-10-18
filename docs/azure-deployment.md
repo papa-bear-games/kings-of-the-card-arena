@@ -218,19 +218,14 @@ with the workbook's **Advanced Editor**. See [ADR 0033](adr/0033-ops-dashboard.m
 
 Add a repository variable `ALERT_EMAIL` with your address and run **Deploy to Azure**. The deploy then adds:
 
-- **Server errors:** an email when 5 or more player requests fail with a 5xx status within 15 minutes.
-  Application Insights > **Failures** shows which endpoint failed and the exception behind it.
-- **Slow requests:** an email when the slowest 5% of player requests take over 2 seconds within
-  15 minutes (only when there were at least 20). The ops dashboard shows which endpoint and whether the API
-  or the database is at its limit.
-- **Browser errors:** an email when players' browsers report 10 or more errors within 15 minutes, which
-  can happen after a client release while the API is fine.
 - **Crash loop:** an email when the API container restarts 3 or more times within 15 minutes. Check the
   Container App's **Log stream** and **Revisions**.
 
-Each alert emails again when it resolves. Azure sends a confirmation email when you're added to the alert
-group. Together they cost under $2 a month: about $0.50 for each of the three query checks, which run every
-15 minutes, and $0.10 for the restart check. Removing the variable stops new deploys from creating them, but existing rules stay until you delete them in the portal under Monitor > Alerts > Alert rules.
+It emails again when it resolves. Azure sends a confirmation email when you're added to the alert
+group. It costs about $0.10 a month. Three log alerts (server errors, slow requests and browser errors) were
+removed on 2026-10-17 to keep Azure under its $10 budget, about $1.50 a month for a free showpiece; the
+deploy deletes them where they still exist. Application Insights > **Failures** and the ops dashboard still
+show the same signals. Removing the variable stops new deploys from creating them, but existing rules stay until you delete them in the portal under Monitor > Alerts > Alert rules.
 
 ## Troubleshooting
 

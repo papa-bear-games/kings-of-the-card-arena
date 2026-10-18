@@ -1,5 +1,7 @@
 # Status
 
+- 2026-10-17: The three log alerts (server errors, slow requests, browser errors) are gone from the
+  template and deleted by the deploy, to keep Azure under $10 a month (Scottie). The crash-loop email alert stays.
 - 2026-10-13: Repo moved from `scox115` to the `papa-bear-games` GitHub org. The game itself is
   live and unchanged at https://play.scottcoxdev.com. After the move, deploys failed at "Sign in
   to Azure" because Azure only trusted the old repo name. Fixed the same day: Scottie removed the

@@ -637,8 +637,9 @@ resource opsDashboard 'Microsoft.Insights/workbooks@2023-06-01' = {
 }
 
 // --- Alerts ---
-// Email is free up to 1,000 a month. Each log alert runs every 15 minutes (about $0.50 a month) and the
-// metric alert costs about $0.10 a month.
+// Email is free up to 1,000 a month. The metric alert costs about $0.10 a month. The three log alerts
+// (server errors, slow requests, browser errors) were removed on 2026-10-17 to keep Azure under budget
+// (about $1.50 a month for a free showpiece); deploy-environment.yml deletes them where they still exist.
 
 var alertsEnabled = !empty(alertEmail)
 
@@ -656,111 +657,6 @@ resource alertEmails 'Microsoft.Insights/actionGroups@2023-01-01' = if (alertsEn
         useCommonAlertSchema: true
       }
     ]
-  }
-}
-
-// Health probes aren't traced, so these are real players' requests failing.
-resource serverErrorsAlert 'Microsoft.Insights/scheduledQueryRules@2023-03-15-preview' = if (alertsEnabled) {
-  name: 'alert-${appName}-server-errors'
-  location: location
-  tags: tags
-  properties: {
-    displayName: 'Card Arena API is returning server errors'
-    description: 'Five or more requests failed with a 5xx status in the last 15 minutes. Open Application Insights > Failures to see which endpoint and exception.'
-    severity: 1
-    enabled: true
-    scopes: [appInsights.id]
-    evaluationFrequency: 'PT15M'
-    windowSize: 'PT15M'
-    criteria: {
-      allOf: [
-        {
-          query: 'requests | where toint(resultCode) >= 500'
-          timeAggregation: 'Count'
-          operator: 'GreaterThanOrEqual'
-          threshold: 5
-          failingPeriods: {
-            numberOfEvaluationPeriods: 1
-            minFailingPeriodsToAlert: 1
-          }
-        }
-      ]
-    }
-    autoMitigate: true
-    actions: {
-      actionGroups: [alertEmails.id]
-    }
-  }
-}
-
-// Slow answers are the first sign of a struggling database or an API at its replica limit. SignalR
-// connections stay open for a whole visit, so they aren't response times; quiet periods are skipped
-// because a handful of cold starts would trip it.
-resource slowRequestsAlert 'Microsoft.Insights/scheduledQueryRules@2023-03-15-preview' = if (alertsEnabled) {
-  name: 'alert-${appName}-slow-requests'
-  location: location
-  tags: tags
-  properties: {
-    displayName: 'Card Arena API is slow'
-    description: 'The slowest 5% of player requests took over 2 seconds in the last 15 minutes. Open the ops dashboard (Endpoints, slowest first) and the Azure resources section.'
-    severity: 2
-    enabled: true
-    scopes: [appInsights.id]
-    evaluationFrequency: 'PT15M'
-    windowSize: 'PT15M'
-    criteria: {
-      allOf: [
-        {
-          query: 'requests | where url !contains "/hubs/" | summarize Requests = count(), SlowestFivePercent = percentile(duration, 95) | where Requests >= 20'
-          timeAggregation: 'Maximum'
-          metricMeasureColumn: 'SlowestFivePercent'
-          operator: 'GreaterThan'
-          threshold: 2000
-          failingPeriods: {
-            numberOfEvaluationPeriods: 1
-            minFailingPeriodsToAlert: 1
-          }
-        }
-      ]
-    }
-    autoMitigate: true
-    actions: {
-      actionGroups: [alertEmails.id]
-    }
-  }
-}
-
-// The server can be fine while the game is broken in the browser, for example after a client release.
-resource browserErrorsAlert 'Microsoft.Insights/scheduledQueryRules@2023-03-15-preview' = if (alertsEnabled) {
-  name: 'alert-${appName}-browser-errors'
-  location: location
-  tags: tags
-  properties: {
-    displayName: 'Card Arena is failing in players\' browsers'
-    description: 'Players\' browsers reported 10 or more errors in the last 15 minutes. Open the ops dashboard (Errors in the API and in players\' browsers).'
-    severity: 2
-    enabled: true
-    scopes: [appInsights.id]
-    evaluationFrequency: 'PT15M'
-    windowSize: 'PT15M'
-    criteria: {
-      allOf: [
-        {
-          query: 'exceptions | where client_Type == "Browser"'
-          timeAggregation: 'Count'
-          operator: 'GreaterThanOrEqual'
-          threshold: 10
-          failingPeriods: {
-            numberOfEvaluationPeriods: 1
-            minFailingPeriodsToAlert: 1
-          }
-        }
-      ]
-    }
-    autoMitigate: true
-    actions: {
-      actionGroups: [alertEmails.id]
-    }
   }
 }
 

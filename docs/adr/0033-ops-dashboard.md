@@ -1,5 +1,7 @@
 # 0033. An ops dashboard and alerts kept in code
 
+> **Update 2026-10-17:** the three log alerts (server errors, slow requests, browser errors) were removed to keep Azure under its $10 a month budget (about $1.50 a month for a free showpiece, Scottie). The crash-loop alert and the dashboard stay.
+
 - **Status:** Accepted
 - **Date:** 2026-10-07
 - **Builds on:** [0019](0019-browser-telemetry.md) (browser telemetry), [0016](0016-blue-green-deploys.md) (blue-green releases), [0027](0027-scale-out.md) (several replicas)

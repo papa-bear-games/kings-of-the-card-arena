@@ -206,6 +206,21 @@ jobs:
           RABBITMQ_PASSWORD: ${{ secrets.RABBITMQ_PASSWORD }}
           REGISTRY_PASSWORD: ${{ secrets.GHCR_READ_TOKEN }}
 
+      # The log alerts were taken out of main.bicep (2026-10-17), and an incremental deployment never
+      # deletes resources, so remove any that are still there. Nothing happens once they're gone.
+      - name: Remove the retired log alerts
+        run: |
+          for name in alert-cardarena-server-errors alert-cardarena-slow-requests alert-cardarena-browser-errors; do
+            if az resource show --resource-group "$RESOURCE_GROUP" --name "$name" \
+                 --resource-type Microsoft.Insights/scheduledQueryRules --output none 2>/dev/null; then
+              az resource delete --resource-group "$RESOURCE_GROUP" --name "$name" \
+                --resource-type Microsoft.Insights/scheduledQueryRules
+              echo "Removed $name"
+            fi
+          done
+        env:
+          RESOURCE_GROUP: ${{ vars.AZURE_RESOURCE_GROUP }}
+
       - name: Update the API image only
         if: steps.plan.outputs.full == 'false'
         run: |

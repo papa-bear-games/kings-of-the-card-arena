@@ -3,6 +3,9 @@
 Newest first. Design decisions about the code are ADRs in `docs/adr/`; this file holds decisions
 about the repo and the project.
 
+- 2026-10-17: Removed the three log alerts (server errors, slow requests, browser errors) to keep Azure
+  under its $10 a month budget, about $1.50 a month for a free showpiece (Scottie). The crash-loop alert
+  ($0.10) stays; deploys delete the old alerts where they still exist.
 - 2026-10-13: Production's database stays on paid Basic (about $5 a month), which Scottie set on
   2026-10-10, rather than moving back to the free serverless offer (Scottie).
 - 2026-10-13: The deploy no longer forces the free offer on a shared database someone moved to a
