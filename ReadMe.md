@@ -1,7 +1,7 @@
 # ⚔️ Kings of the Card Arena
 
-[![CI](https://github.com/papa-bear-games/gameappportfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/papa-bear-games/gameappportfolio/actions/workflows/ci.yml)
-[![Deploy](https://github.com/papa-bear-games/gameappportfolio/actions/workflows/deploy.yml/badge.svg)](https://github.com/papa-bear-games/gameappportfolio/actions/workflows/deploy.yml)
+[![CI](https://github.com/papa-bear-games/kings-of-the-card-arena/actions/workflows/ci.yml/badge.svg)](https://github.com/papa-bear-games/kings-of-the-card-arena/actions/workflows/ci.yml)
+[![Deploy](https://github.com/papa-bear-games/kings-of-the-card-arena/actions/workflows/deploy.yml/badge.svg)](https://github.com/papa-bear-games/kings-of-the-card-arena/actions/workflows/deploy.yml)
 ![.NET 10](https://img.shields.io/badge/.NET-10-512BD4)
 ![Azure](https://img.shields.io/badge/Azure-Container%20Apps%20%7C%20SQL%20%7C%20Static%20Web%20Apps-0078D4)
 
@@ -9,7 +9,7 @@ A turn-based card battler built with **ASP.NET Core, Blazor WebAssembly, SignalR
 
 It's a portfolio project, built the way a production service would be: clean architecture, server-authoritative game rules, passwordless cloud access, health checks, OpenTelemetry, a test pyramid from unit to browser to load tests, and an Architecture Decision Record for each significant decision.
 
-**▶ Play it: https://play.scottcoxdev.com** · [System status](https://play.scottcoxdev.com/status) · [More of my work](https://scottcoxdev.com)
+**▶ Play it from [scottcoxdev.com](https://scottcoxdev.com)** (the game opens only from there, [ADR 0041](docs/adr/0041-play-from-scottcoxdev.md)) · [System status](https://play.scottcoxdev.com/status) · [More of my work](https://scottcoxdev.com)
 
 **New here?** The [five-minute case study](docs/case-study.md) covers the architecture, the key decisions and the numbers, with a live duel recorded in two browsers.
 

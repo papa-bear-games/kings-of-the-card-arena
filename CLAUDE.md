@@ -1,9 +1,14 @@
-# Kings of the Card Arena (gameappportfolio)
+# Kings of the Card Arena
 
 Scottie's portfolio project: a turn-based card battler in the browser, built like a production
 service. Live at https://play.scottcoxdev.com and linked from https://scottcoxdev.com
-(papa-bear-games/portfolio-app-slc). Repo: https://github.com/papa-bear-games/gameappportfolio
-(moved from `scox115/gameappportfolio` on 2026-10-13; old links redirect).
+(papa-bear-games/scottcoxdev-site). Repo: https://github.com/papa-bear-games/kings-of-the-card-arena, public on
+purpose so hiring managers can read the code (moved from
+`scox115/gameappportfolio` on 2026-10-13 and renamed from `gameappportfolio` on 2026-10-15; old
+links redirect).
+
+The web game is free and opens only from scottcoxdev.com (ADR 0041). The paid Android version is a
+separate project in `papa-bear-games/kings-of-the-card-arena-android`; changes for it don't go here.
 
 Read this first, then `docs/STATUS.md` (where it stands and what waits on Scottie) and
 `docs/DECISIONS.md` (decisions about the repo and project). Design decisions about the code are

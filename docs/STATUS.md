@@ -2,6 +2,15 @@
 
 - 2026-10-17: The three log alerts (server errors, slow requests, browser errors) are gone from the
   template and deleted by the deploy, to keep Azure under $10 a month (Scottie). The crash-loop email alert stays.
+- 2026-10-15: The free web game now opens only for visitors who come from scottcoxdev.com; others
+  see a page pointing there (ADR 0041). Scottie chose this because a separate, paid Android
+  version is planned in its own repo, `kings-of-the-card-arena-android` (Unity, its own server and
+  accounts). That work happens there, not here. Plan:
+  https://claude.ai/code/artifact/638337ca-b99e-4261-ae82-6163c3b51563
+- 2026-10-15: Repo renamed from `gameappportfolio` to `kings-of-the-card-arena`, the game's
+  name. The history is unchanged and old links redirect. The repo stays public. Azure still trusts
+  only the old name, so previews and deploys fail at "Sign in to Azure" until Scottie re-runs
+  `infra/setup.ps1` for production and staging (checked 2026-10-20).
 - 2026-10-13: Repo moved from `scox115` to the `papa-bear-games` GitHub org. The game itself is
   live and unchanged at https://play.scottcoxdev.com. After the move, deploys failed at "Sign in
   to Azure" because Azure only trusted the old repo name. Fixed the same day: Scottie removed the

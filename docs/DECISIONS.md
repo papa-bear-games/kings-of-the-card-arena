@@ -6,6 +6,13 @@ about the repo and the project.
 - 2026-10-17: Removed the three log alerts (server errors, slow requests, browser errors) to keep Azure
   under its $10 a month budget, about $1.50 a month for a free showpiece (Scottie). The crash-loop alert
   ($0.10) stays; deploys delete the old alerts where they still exist.
+- 2026-10-15: The web game stays free and opens only from scottcoxdev.com (Scottie; ADR 0041).
+- 2026-10-15: A paid Android version is built separately (Scottie): Unity, in its own private repo
+  `kings-of-the-card-arena-android`, with a copy of this server, its own accounts and leaderboards,
+  and cosmetics-only purchases. This repo is not changed for it.
+- 2026-10-15: Renamed the repo to `kings-of-the-card-arena`, after the game (Scottie).
+- 2026-10-15: The repo stays public, the only public Papa Bear game repo, because it is a
+  portfolio piece and scottcoxdev.com links to its code (Scottie).
 - 2026-10-13: Production's database stays on paid Basic (about $5 a month), which Scottie set on
   2026-10-10, rather than moving back to the free serverless offer (Scottie).
 - 2026-10-13: The deploy no longer forces the free offer on a shared database someone moved to a

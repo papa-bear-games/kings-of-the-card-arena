@@ -1,7 +1,7 @@
 name: Deploy to Azure
 
 # Template for a portfolio app on the shared base (copy to .github/workflows/deploy.yml in the app's
-# repository). templates/new-app/setup-app.ps1 in papa-bear-games/gameappportfolio sets the variables this reads.
+# repository). templates/new-app/setup-app.ps1 in papa-bear-games/kings-of-the-card-arena sets the variables this reads.
 # Builds the repository's Dockerfile, pushes the image to GitHub Container Registry and runs it in the
 # shared Container Apps environment. The first run creates the container app; later runs change only its
 # image, so custom domains and settings made by hand stay as they are.

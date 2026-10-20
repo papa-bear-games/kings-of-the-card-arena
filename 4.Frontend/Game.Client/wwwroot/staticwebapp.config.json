@@ -16,7 +16,8 @@
     "Referrer-Policy": "strict-origin-when-cross-origin",
     "X-Frame-Options": "DENY",
     "Permissions-Policy": "camera=(), microphone=(), geolocation=(), payment=()",
-    "Cross-Origin-Opener-Policy": "same-origin"
+    "Cross-Origin-Opener-Policy": "same-origin",
+    "X-Robots-Tag": "noindex"
   },
   "mimeTypes": {
     ".wasm": "application/wasm",
