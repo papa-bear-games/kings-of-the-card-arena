@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aspire.Hosting.Testing" Version="13.6.0" />
+    <PackageReference Include="Aspire.Hosting.Testing" Version="13.6.1" />
     <PackageReference Include="coverlet.collector" Version="10.1.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.10.1" />
     <!-- Pinned above the vulnerable 9.0.11/10.0.12 that Azure and Aspire packages bring in (GHSA-846f-f764-76mx, GHSA-2fmv-rv2c-59x7). -->
