@@ -1,5 +1,13 @@
 # Status
 
+- 2026-10-15: The free web game now opens only for visitors who come from scottcoxdev.com; others
+  see a page pointing there (ADR 0041). Scottie chose this because a separate, paid Android
+  version is planned in its own repo, `kings-of-the-card-arena-android` (Unity, its own server and
+  accounts). That work happens there, not here. Plan:
+  https://claude.ai/code/artifact/638337ca-b99e-4261-ae82-6163c3b51563
+- 2026-10-15: Repo renamed from `gameappportfolio` to `kings-of-the-card-arena`, the game's
+  name. The history is unchanged and old links redirect. `infra/setup.ps1` was re-run for
+  production and staging so Azure trusts the new name. The repo stays public.
 - 2026-10-13: Repo moved from `scox115` to the `papa-bear-games` GitHub org. The game itself is
   live and unchanged at https://play.scottcoxdev.com. After the move, deploys failed at "Sign in
   to Azure" because Azure only trusted the old repo name. Fixed the same day: Scottie removed the

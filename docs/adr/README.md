@@ -44,5 +44,6 @@ Each record explains one decision that shapes this codebase: what problem it sol
 | [0038](0038-match-replays.md) | Match replays: every card recorded as it is played | Accepted |
 | [0039](0039-client-component-conventions.md) | Blazor client: scoped CSS, thin pages, code-behind | Accepted |
 | [0040](0040-shared-portfolio-base.md) | Run every portfolio app on one shared Azure base | Accepted |
+| [0041](0041-play-from-scottcoxdev.md) | Open the free web game only from scottcoxdev.com | Accepted |
 
 To add one, copy [template.md](template.md), give it the next number, and add it to the table.

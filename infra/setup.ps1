@@ -38,7 +38,7 @@ param(
 
     [string] $ResourceGroup = 'rg-card-arena',
     [string] $Location = 'eastus2',
-    [string] $GitHubRepo = 'papa-bear-games/gameappportfolio',
+    [string] $GitHubRepo = 'papa-bear-games/kings-of-the-card-arena',
     [string] $IdentityName = 'id-card-arena-api',
     [string] $SqlAdminGroupName = 'card-arena-sql-admins',
     [string] $DeployAppName = 'card-arena-github-deploy'
