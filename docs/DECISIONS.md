@@ -3,6 +3,9 @@
 Newest first. Design decisions about the code are ADRs in `docs/adr/`; this file holds decisions
 about the repo and the project.
 
+- 2026-10-17: Removed the three log alerts (server errors, slow requests, browser errors) to keep Azure
+  under its $10 a month budget, about $1.50 a month for a free showpiece (Scottie). The crash-loop alert
+  ($0.10) stays; deploys delete the old alerts where they still exist.
 - 2026-10-15: The web game stays free and opens only from scottcoxdev.com (Scottie; ADR 0041).
 - 2026-10-15: A paid Android version is built separately (Scottie): Unity, in its own private repo
   `kings-of-the-card-arena-android`, with a copy of this server, its own accounts and leaderboards,
