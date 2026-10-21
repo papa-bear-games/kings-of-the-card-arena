@@ -1,5 +1,9 @@
 # Status
 
+- 2026-10-20: Merged #129 (rename, gate), #130 (log alerts), #131 (MessagePack 2.5.307 pin for
+  GHSA-qhrr-8q5h-9q3h) and Dependabot #128 and #136. Closed Dependabot #121, #122 and #135 as already
+  covered. None of it is live yet: every deploy stops at "Sign in to Azure" until Scottie re-runs
+  `infra/setup.ps1` for production and staging; then re-run the latest `deploy.yml`.
 - 2026-10-17: The three log alerts (server errors, slow requests, browser errors) are gone from the
   template and deleted by the deploy, to keep Azure under $10 a month (Scottie). The crash-loop email alert stays.
 - 2026-10-15: The free web game now opens only for visitors who come from scottcoxdev.com; others
