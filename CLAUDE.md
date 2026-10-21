@@ -1,3 +1,5 @@
+Kind: web
+
 # Kings of the Card Arena
 
 Scottie's portfolio project: a turn-based card battler in the browser, built like a production
