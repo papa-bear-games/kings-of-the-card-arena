@@ -19,21 +19,23 @@ jobs:
     runs-on: ${{ vars.CHECK_RUNNER || 'checks' }}
     # A real SQL Server, the engine the game runs on in Azure. Tests marked for it (the lobby, the outbox,
     # two API replicas and the migrations) run against it; the rest use the in-memory provider.
-    services:
-      sqlserver:
-        image: mcr.microsoft.com/mssql/server:2022-latest
-        env:
-          ACCEPT_EULA: "Y"
-          MSSQL_SA_PASSWORD: CI-only-Passw0rd
-        ports:
-          - 1433:1433
-        options: >-
-          --health-cmd "/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P CI-only-Passw0rd -Q 'SELECT 1' -b"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 12
+    # No service containers: hive2 hides /proc/1, so the runner can't start them. SQL Server runs
+    # with docker run below and is removed at the end (no GitHub-hosted runners, 2026-10-24).
+    env:
+      SQL_NAME: kca-sql-${{ github.run_id }}
     steps:
       - uses: actions/checkout@v7
+
+      - name: Start SQL Server
+        run: |
+          docker run -d --name "$SQL_NAME" -e ACCEPT_EULA=Y -e MSSQL_SA_PASSWORD=CI-only-Passw0rd -p 127.0.0.1::1433 mcr.microsoft.com/mssql/server:2022-latest
+          # Its own free port, so two jobs on hive2 never clash over 1433.
+          echo "SQL_PORT=$(docker port "$SQL_NAME" 1433/tcp | head -1 | cut -d: -f2)" >> "$GITHUB_ENV"
+          for i in $(seq 1 30); do
+            docker exec "$SQL_NAME" /opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P CI-only-Passw0rd -Q 'SELECT 1' -b && exit 0
+            sleep 5
+          done
+          docker logs "$SQL_NAME"; exit 1
 
       - uses: actions/setup-dotnet@v6
         with:
@@ -59,7 +61,7 @@ jobs:
       # The browser tests run in their own job below.
       - name: Test
         env:
-          TEST_SQLSERVER: Server=localhost,1433;User Id=sa;Password=CI-only-Passw0rd;TrustServerCertificate=True
+          TEST_SQLSERVER: Server=localhost,${{ env.SQL_PORT }};User Id=sa;Password=CI-only-Passw0rd;TrustServerCertificate=True
         run: >
           dotnet test GamePortfolioSolution.slnx --no-build --configuration Release
           --filter "Category!=Browser"
@@ -73,6 +75,10 @@ jobs:
           name: test-results
           path: TestResults/*.trx
           retention-days: 1
+
+      - name: Remove SQL Server
+        if: always()
+        run: docker rm -f "$SQL_NAME" || true
 
   # The blue-green release script decides when players move to a new API revision, so it is tested
   # like code: against stand-ins for the az and curl commands.
