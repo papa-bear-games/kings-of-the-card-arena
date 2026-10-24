@@ -29,7 +29,7 @@ env:
 jobs:
   move:
     if: inputs.confirm == 'move' && vars.AZURE_SHARED_RESOURCE_GROUP != ''
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.CHECK_RUNNER || 'checks' }}
     environment: ${{ inputs.environment }}
     # The deploy's group, so a deploy from main never runs in the middle of the move.
     concurrency:

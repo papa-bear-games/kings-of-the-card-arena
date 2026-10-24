@@ -16,7 +16,7 @@ permissions:
 jobs:
   analyze:
     if: github.event.repository.private == false
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.CHECK_RUNNER || 'checks' }}
     permissions:
       contents: read
       security-events: write

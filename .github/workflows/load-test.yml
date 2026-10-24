@@ -34,7 +34,7 @@ concurrency:
 
 jobs:
   load-test:
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.CHECK_RUNNER || 'checks' }}
     timeout-minutes: 30
     env:
       PROFILE: ${{ inputs.profile || 'smoke' }}
@@ -75,6 +75,7 @@ jobs:
         with:
           name: load-test-${{ env.PROFILE }}
           path: loadtest/results/
+          retention-days: 1
 
       - name: Stop the stack
         if: always()

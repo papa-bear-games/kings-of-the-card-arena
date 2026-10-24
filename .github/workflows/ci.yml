@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   build-and-test:
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.CHECK_RUNNER || 'checks' }}
     # A real SQL Server, the engine the game runs on in Azure. Tests marked for it (the lobby, the outbox,
     # two API replicas and the migrations) run against it; the rest use the in-memory provider.
     services:
@@ -72,11 +72,12 @@ jobs:
         with:
           name: test-results
           path: TestResults/*.trx
+          retention-days: 1
 
   # The blue-green release script decides when players move to a new API revision, so it is tested
   # like code: against stand-ins for the az and curl commands.
   deploy-scripts:
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.CHECK_RUNNER || 'checks' }}
     steps:
       - uses: actions/checkout@v7
 
@@ -115,7 +116,7 @@ jobs:
   # Plays the game in Chromium: the published Blazor client against the real API
   # (in-memory database, no RabbitMQ), started by the tests themselves.
   browser-tests:
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.CHECK_RUNNER || 'checks' }}
     steps:
       - uses: actions/checkout@v7
 
@@ -155,3 +156,4 @@ jobs:
           path: |
             BrowserTestResults/*.trx
             BrowserTestResults/screenshots/
+          retention-days: 1

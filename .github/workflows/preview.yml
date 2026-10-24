@@ -29,7 +29,7 @@ jobs:
     if: >-
       vars.STAGING_ENABLED == 'true' && github.event.action != 'closed' &&
       github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]'
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.CHECK_RUNNER || 'checks' }}
     environment:
       name: staging
       url: ${{ steps.deploy.outputs.static_web_app_url }}
@@ -102,7 +102,7 @@ jobs:
     if: >-
       vars.STAGING_ENABLED == 'true' && github.event.action == 'closed' &&
       github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]'
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.CHECK_RUNNER || 'checks' }}
     environment: staging
     steps:
       - uses: actions/checkout@v7

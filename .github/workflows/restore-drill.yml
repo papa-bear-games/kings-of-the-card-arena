@@ -32,7 +32,7 @@ env:
 jobs:
   drill:
     if: vars.AZURE_CLIENT_ID != ''
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.CHECK_RUNNER || 'checks' }}
     environment: production
     timeout-minutes: 90
     steps:

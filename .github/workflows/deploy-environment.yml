@@ -31,7 +31,7 @@ env:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.CHECK_RUNNER || 'checks' }}
     # Shared with the Rollback workflow, so a rollback never runs in the middle of a deploy.
     concurrency:
       group: deploy-${{ inputs.environment }}
