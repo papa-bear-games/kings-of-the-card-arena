@@ -69,6 +69,8 @@ jobs:
           --results-directory TestResults
 
       - name: Upload test results
+        # Only for looking into a failure: never fail the job over GitHub's artifact storage.
+        continue-on-error: true
         if: always()
         uses: actions/upload-artifact@v7
         with:
@@ -155,6 +157,8 @@ jobs:
           --results-directory BrowserTestResults
 
       - name: Upload browser test results
+        # Only for looking into a failure: never fail the job over GitHub's artifact storage.
+        continue-on-error: true
         if: always()
         uses: actions/upload-artifact@v7
         with:

@@ -70,6 +70,8 @@ jobs:
         run: docker compose -f loadtest/compose.yaml logs --tail 200 api
 
       - name: Upload the results
+        # Only for looking into a failure: never fail the job over GitHub's artifact storage.
+        continue-on-error: true
         if: always()
         uses: actions/upload-artifact@v7
         with:
