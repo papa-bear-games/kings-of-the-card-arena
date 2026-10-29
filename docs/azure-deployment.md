@@ -123,6 +123,8 @@ Runs the game's API and database on the base every portfolio app shares: one Con
 
 If the move fails, the new database is deleted and the deploy that follows puts the game back where it was; the run's log says which step failed. Running the workflow again after a successful move only redeploys.
 
+If a database was moved to a paid tier by hand, run **Database back to free** for that copy, typing `free` to confirm. It deletes the API, copies the database into a new free one of the same name, checks every table's row count, deletes the paid one (restorable from Azure's deleted databases for 7 days) and deploys again. The game is down for a few minutes. If the copy fails, the paid database gets its name back.
+
 To put another app on the shared base, use [`templates/new-app`](../templates/new-app/README.md): one setup script and a deploy workflow to copy into the app's repository.
 
 ## Scaling out

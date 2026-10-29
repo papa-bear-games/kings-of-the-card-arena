@@ -1,5 +1,8 @@
 # Status
 
+- 2026-10-29: Added the "Database back to free" workflow (`infra/back_to_free.py`), which copies a
+  paid database into a new free one of the same name and deletes the paid one. Scottie chose to run it
+  for production to save about $5 a month.
 - 2026-10-20: Merged #129 (rename, gate), #130 (log alerts), #131 (MessagePack 2.5.307 pin for
   GHSA-qhrr-8q5h-9q3h) and Dependabot #128 and #136. Closed Dependabot #121, #122 and #135 as already
   covered. 2026-10-21: Scottie re-ran `infra/setup.ps1` for the new repo name, and the
