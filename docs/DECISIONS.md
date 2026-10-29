@@ -3,6 +3,10 @@
 Newest first. Design decisions about the code are ADRs in `docs/adr/`; this file holds decisions
 about the repo and the project.
 
+- 2026-10-29: Production's database goes back to the free serverless offer, to bring Azure under its
+  $10 a month budget (Scottie). It was on paid Basic (about $5 a month) since 2026-10-10 so it never
+  paused; the first visit after a quiet hour now takes a few seconds longer. Azure can't switch a paid
+  database to free in place, so the "Database back to free" workflow copies it (`infra/back_to_free.py`).
 - 2026-10-17: Removed the three log alerts (server errors, slow requests, browser errors) to keep Azure
   under its $10 a month budget, about $1.50 a month for a free showpiece (Scottie). The crash-loop alert
   ($0.10) stays; deploys delete the old alerts where they still exist.
