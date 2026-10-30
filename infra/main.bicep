@@ -715,9 +715,11 @@ resource databaseBusyAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = if (da
       allOf: [
         {
           criterionType: 'StaticThresholdCriterion'
-          name: 'dtu'
+          name: 'cpu'
           metricNamespace: 'Microsoft.Sql/servers/databases'
-          metricName: 'dtu_consumption_percent'
+          // cpu_percent, not dtu_consumption_percent: Azure Monitor didn't know the DTU metric for a
+          // database just moved from the free serverless offer to Basic (2026-10-30), which failed the deploy.
+          metricName: 'cpu_percent'
           timeAggregation: 'Average'
           operator: 'GreaterThan'
           threshold: 80
