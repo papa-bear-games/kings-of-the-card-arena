@@ -1,0 +1,80 @@
+name: Database to Basic
+
+# Moves one copy of the game's database from the free serverless offer to paid Basic (about $5 a
+# month), in place: same server, same name, no copy and no new settings. Basic never pauses, so the
+# first request after a quiet hour is as fast as any other. Papa Bear Games' account service keeps its
+# tables in production's database, and Android players need sign-in around the clock (Scottie,
+# 2026-10-30). Azure keeps the database online while it changes tier; open connections drop once at
+# the end. Running it again once the database is on Basic does nothing. Deploys leave a paid database
+# as it is (infra/shared-base.sh says free=false).
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Which copy of the game
+        type: choice
+        options: [production, staging]
+        default: production
+      confirm:
+        description: Type "basic" to confirm (about $5 a month)
+        type: string
+        required: true
+
+permissions:
+  contents: read
+  id-token: write   # sign in to Azure with OIDC
+
+jobs:
+  basic:
+    if: inputs.confirm == 'basic'
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    concurrency:
+      group: deploy-${{ inputs.environment }}
+      cancel-in-progress: false
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Sign in to Azure
+        uses: azure/login@v3
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Move the database to Basic
+        env:
+          SHARED_GROUP: ${{ vars.AZURE_SHARED_RESOURCE_GROUP }}
+        run: |
+          eval "$(bash infra/shared-base.sh "$SHARED_GROUP" "${{ inputs.environment }}" | grep -E '^(server|database|ready)=')"
+          [ "$ready" = true ] || { echo "::error::No $database database on the shared base."; exit 1; }
+          db=(--resource-group "$SHARED_GROUP" --server "$server" --name "$database")
+          show() { az sql db show "${db[@]}" --query '{sku:currentServiceObjectiveName, free:useFreeLimit, maxGb:maxSizeBytes}' -o json; }
+          echo "Before:"; show
+          if [ "$(az sql db show "${db[@]}" --query currentServiceObjectiveName -o tsv)" = Basic ]; then
+            echo "Already on Basic; nothing to do."; exit 0
+          fi
+          used=$(az sql db list-usages "${db[@]}" --query "[?name=='database_size'].currentValue | [0]" -o tsv)
+          echo "Data in use: $used bytes"
+          # Basic holds at most 2 GB.
+          if [ "${used%.*}" -ge 2000000000 ]; then echo "::error::The database is over Basic's 2 GB."; exit 1; fi
+          az sql db update "${db[@]}" --use-free-limit false --output none
+          az sql db update "${db[@]}" --edition Basic --service-objective Basic --max-size 2GB --output none
+          echo "After:"; show
+          [ "$(az sql db show "${db[@]}" --query currentServiceObjectiveName -o tsv)" = Basic ]
+          {
+            echo "### ✅ ${{ inputs.environment }}'s database \`$database\` is on paid Basic"
+            echo ""
+            echo "It never pauses now. About \$5 a month."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Check the game server answers
+        if: inputs.environment == 'production'
+        run: |
+          api=$(curl -fsS --max-time 30 https://play.scottcoxdev.com/appsettings.Production.json | jq -r '.ApiBaseUrl // empty')
+          for attempt in 1 2 3 4 5; do
+            curl -fsS --max-time 60 "${api%/}/health/live" > /dev/null && exit 0
+            sleep 20
+          done
+          exit 1

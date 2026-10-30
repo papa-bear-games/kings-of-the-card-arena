@@ -1,5 +1,7 @@
 # Status
 
+- 2026-10-30: Added the "Database to Basic" workflow, which moves a copy's database from the free offer
+  to paid Basic in place; production runs on Basic again (Scottie: sign-in must work around the clock).
 - 2026-10-29: Added the "Database back to free" workflow (`infra/back_to_free.py`), which copies a
   paid database into a new free one of the same name and deletes the paid one. Scottie chose to run it
   for production to save about $5 a month.
