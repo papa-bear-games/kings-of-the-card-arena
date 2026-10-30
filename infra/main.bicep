@@ -694,6 +694,75 @@ resource restartsAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = if (alerts
   }
 }
 
+// The paid Basic database (Scottie, 2026-10-30) costs the same however busy it is, so the risk is it
+// running slow or full, not the bill: email at 80% of its computing power over an hour, and at half of
+// its 2 GB, months before it could fill (a full database stops saving new data). About $0.10 a month each. The Papa Bear account service shares this database.
+var databaseAlerts = alertsEnabled && useSharedBase && !sharedDatabaseFree
+
+resource databaseBusyAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = if (databaseAlerts) {
+  name: 'alert-${appName}-database-busy'
+  location: 'global'
+  tags: tags
+  properties: {
+    description: 'The database used over 80% of its computing power for an hour. Sign-in and the game may slow down; the next size up is Standard S0 (about $15 a month).'
+    severity: 2
+    enabled: true
+    scopes: [databaseId]
+    evaluationFrequency: 'PT15M'
+    windowSize: 'PT1H'
+    criteria: {
+      'odata.type': 'Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria'
+      allOf: [
+        {
+          criterionType: 'StaticThresholdCriterion'
+          name: 'dtu'
+          metricNamespace: 'Microsoft.Sql/servers/databases'
+          metricName: 'dtu_consumption_percent'
+          timeAggregation: 'Average'
+          operator: 'GreaterThan'
+          threshold: 80
+        }
+      ]
+    }
+    autoMitigate: true
+    actions: [
+      { actionGroupId: alertEmails.id }
+    ]
+  }
+}
+
+resource databaseFullAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = if (databaseAlerts) {
+  name: 'alert-${appName}-database-full'
+  location: 'global'
+  tags: tags
+  properties: {
+    description: 'The database is over half of its 2 GB. Move it to Standard S0 (250 GB, about $15 a month) well before it is full: a full database stops saving new data.'
+    severity: 2
+    enabled: true
+    scopes: [databaseId]
+    evaluationFrequency: 'PT1H'
+    windowSize: 'PT1H'
+    criteria: {
+      'odata.type': 'Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria'
+      allOf: [
+        {
+          criterionType: 'StaticThresholdCriterion'
+          name: 'storage'
+          metricNamespace: 'Microsoft.Sql/servers/databases'
+          metricName: 'storage_percent'
+          timeAggregation: 'Maximum'
+          operator: 'GreaterThan'
+          threshold: 50
+        }
+      ]
+    }
+    autoMitigate: true
+    actions: [
+      { actionGroupId: alertEmails.id }
+    ]
+  }
+}
+
 output environmentName string = environmentName
 output apiUrl string = 'https://${api.properties.configuration.ingress.fqdn}'
 output clientUrl string = 'https://${client.properties.defaultHostname}'
