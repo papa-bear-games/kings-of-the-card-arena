@@ -23,6 +23,7 @@ on:
 permissions:
   contents: read
   id-token: write   # sign in to Azure with OIDC
+  packages: write   # the deploy that follows pushes the API image
 
 jobs:
   basic:
@@ -78,3 +79,12 @@ jobs:
             sleep 20
           done
           exit 1
+
+  # Deploys again so the database alerts (80% busy, half full; infra/main.bicep) are made for the paid database.
+  deploy:
+    needs: basic
+    uses: ./.github/workflows/deploy-environment.yml
+    with:
+      environment: ${{ inputs.environment }}
+      full: true
+    secrets: inherit
