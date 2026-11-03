@@ -19,7 +19,7 @@
     <PackageReference Include="QRCoder" Version="1.8.1" />
     <PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.13" />
     <!-- Pinned above the vulnerable 2.5.302 that Aspire pulls in transitively (GHSA-qhrr-8q5h-9q3h). -->
-    <PackageReference Include="MessagePack" Version="2.5.307" />
+    <PackageReference Include="MessagePack" Version="3.1.12" />
   </ItemGroup>
 
   <ItemGroup>
