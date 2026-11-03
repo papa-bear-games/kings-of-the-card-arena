@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -c \"import os,sys,subprocess as s;p=os.environ.get('CLAUDE_PROJECT_DIR','.');r='tools/claude-guard/session_start.py';c=[os.path.join(p,r),os.path.join(p,'..','mobile-shared-code',r),os.path.join(p,'..','papabear-hq',r),os.path.join(p,'..','papabear-platform',r),'/home/claude/mobile-shared-code/'+r,'/home/claude/papabear-hq/'+r,'/home/claude/papabear-platform/'+r,os.path.expanduser('~/Repos/GitHub/mobile-shared-code/'+r),os.path.expanduser('~/Repos/GitHub/papabear-hq/'+r),os.path.expanduser('~/Repos/GitHub/papabear-platform/'+r)];f=next((x for x in c if os.path.isfile(x)),None);sys.exit(s.call([sys.executable,f]) if f else print('Papa Bear rules NOT loaded: mobile-shared-code (formerly papabear-hq) is not attached. Read mobile-shared-code rules/START-HERE.md (github.com/papa-bear-games/mobile-shared-code) before any work, and tell Scottie the repo is missing.'))\""
+          }
+        ]
+      }
+    ]
+  }
+}
