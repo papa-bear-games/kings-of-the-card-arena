@@ -2,6 +2,8 @@ Kind: web
 
 # Kings of the Card Arena
 
+Read mobile-shared-code `rules/START-HERE.md` first (github.com/papa-bear-games/mobile-shared-code, formerly papabear-hq). Shared rules live there, never copied here.
+
 Scottie's portfolio project: a turn-based card battler in the browser, built like a production
 service. Live at https://play.scottcoxdev.com and linked from https://scottcoxdev.com
 (papa-bear-games/scottcoxdev-site). Repo: https://github.com/papa-bear-games/kings-of-the-card-arena, public on
