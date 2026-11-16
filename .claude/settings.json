@@ -9,6 +9,17 @@
           }
         ]
       }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash|PowerShell|Read|Edit|Write|MultiEdit|Grep|Glob|NotebookEdit|mcp__hearthbot__.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/guard.py\""
+          }
+        ]
+      }
     ]
   }
 }
